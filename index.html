@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Плюй-Камни</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap" rel="stylesheet" />
+  <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+
+  <style>
+    body {
+      background-image: url('https://radika1.link/2025/08/01/ra_forum_background_img_08c2550a6ef5a7985.jpg');
+      background-size: auto;
+      background-position: center;
+      background-repeat: repeat;
+      font-family: 'Georgia', serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      color: #B0B3B9;
+    }
+
+    .header-block {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 10px;
+      width: 100%;
+    }
+
+    .ravenclaw-title {
+      font-family: 'Permanent Marker', cursive;
+      font-weight: 400;
+      font-size: 100px;
+      margin: 0;
+      padding: 0 20px;
+      max-width: 100%;
+      text-align: center;
+      word-break: break-word;
+      overflow-wrap: anywhere;
+      background: linear-gradient(90deg, #BA9868, #FFD580);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-fill-color: transparent;
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+    }
+
+    h1 {
+      color: #C0B29D;
+      margin: 5px 0 10px 20px;
+    }
+
+    .main-container {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      width: 100%;
+      max-width: 1300px;
+      margin-bottom: 30px;
+      padding: 0 20px;
+      box-sizing: border-box;
+    }
+
+    .game-wrapper {
+      background-color: #15273F;
+      width: 640px;
+      padding: 20px 20px 30px 20px;
+      border-radius: 12px;
+      border: 3px double #8A6A3E;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .field-container {
+      position: relative;
+      width: 600px;
+      height: 600px;
+      background-image: url('https://radika1.link/2025/08/01/AddText_08-01-03.22.225b4a3aad5ea2563e.png');
+      background-size: cover;
+      margin-bottom: 20px;
+    }
+
+    .stone {
+      position: absolute;
+      width: 70px;
+      transition: all 0.3s ease;
+      user-select: none;
+      transform-origin: center;
+      transform: translate(-50%, -50%);
+      cursor: pointer;
+    }
+
+    .buttons {
+      display: flex;
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+
+    button {
+      background-color: #23385A;
+      color: #BA9868;
+      border: 2px double #BA9868;
+      padding: 10px 20px;
+      font-size: 16px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #1f2a4c;
+    }
+
+    button:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+    }
+
+    .selectors {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 20px;
+      width: 100%;
+    }
+
+    .selectors div {
+      display: flex;
+      flex-direction: column;
+      font-size: 14px;
+    }
+
+    select {
+      background-color: #23385A;
+      color: #BA9868;
+      border: 1px solid #8A6A3E;
+      border-radius: 6px;
+      padding: 6px;
+      font-size: 14px;
+      max-width: 100%;
+    }
+
+    label {
+      margin-bottom: 4px;
+    }
+
+    .tasks-wrapper {
+      background-color: #15273F;
+      width: 500px;
+      padding: 20px;
+      border-radius: 12px;
+      border: 3px double #8A6A3E;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      height: fit-content;
+    }
+
+    .tasks {
+      width: 100%;
+      height: 260px;
+      background: #23385A;
+      padding: 15px;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      font-size: 14px;
+      border: 1px solid #8A6A3E;
+      overflow-y: auto;
+      box-sizing: border-box;
+      word-wrap: break-word;
+    }
+
+    .tasks ul {
+      padding-left: 20px;
+      margin: 0;
+      list-style-type: none;
+    }
+
+    .tasks li {
+      margin-bottom: 8px;
+      word-break: break-word;
+      display: flex;
+      align-items: flex-start;
+    }
+
+    .tasks input[type="checkbox"] {
+      margin-right: 10px;
+      margin-top: 3px;
+      cursor: pointer;
+    }
+
+    .output-container {
+      width: 100%;
+      margin-top: 15px;
+    }
+
+    .output {
+      width: 100%;
+      height: 260px;
+      background: #23385A;
+      padding: 15px;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      font-size: 14px;
+      box-sizing: border-box;
+      white-space: pre-wrap;
+      font-family: monospace;
+      border: 1px solid #8A6A3E;
+      overflow-wrap: break-word;
+      word-wrap: break-word;
+      overflow-y: auto;
+    }
+
+    .copy-btn {
+      background-color: #23385A;
+      color: #BA9868;
+      border: 2px double #BA9868;
+      padding: 10px 20px;
+      font-size: 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-top: 10px;
+      width: 100%;
+      transition: all 0.3s ease;
+    }
+
+    .copy-btn:hover {
+      background-color: #1f2a4c;
+    }
+
+    .copy-btn.copied {
+      background-color: #23385A;
+      color: #BA9868;
+      border-color: #BA9868;
+      box-shadow: 0 0 10px rgba(186, 152, 104, 0.7);
+    }
+
+    .hidden {
+      display: none;
+    }
+    
+    .completed {
+      text-decoration: line-through;
+      color: #88693D;
+    }
+
+    @media (max-width: 1200px) {
+      .main-container {
+        flex-direction: column;
+        align-items: center;
+      }
+      
+      .tasks-wrapper {
+        width: 640px;
+      }
+    }
+
+    @media (max-width: 700px) {
+      .game-wrapper, .tasks-wrapper {
+        width: 95%;
+        padding: 15px;
+      }
+      
+      .field-container {
+        width: 100%;
+        height: auto;
+        aspect-ratio: 1/1;
+        background-size: contain;
+      }
+      
+      .ravenclaw-title {
+        font-size: 60px;
+      }
+      
+      .buttons {
+        flex-direction: column;
+        gap: 10px;
+        width: 100%;
+      }
+      
+      button {
+        width: 100%;
+        box-sizing: border-box;
+      }
+      
+      .selectors {
+        grid-template-columns: 1fr;
+        gap: 8px;
+      }
+      
+      .selectors div {
+        width: 100%;
+      }
+      
+      select {
+        width: 100%;
+        font-size: 12px;
+      }
+      
+      .stone {
+        width: 15vw;
+        max-width: 60px;
+      }
+      
+      .tasks, .output {
+        height: 200px;
+        font-size: 12px;
+      }
+    }
+
+    @media (max-width: 400px) {
+      .ravenclaw-title {
+        font-size: 40px;
+      }
+      
+      h1 {
+        font-size: 18px;
+        margin: 5px 0;
+      }
+      
+      .stone {
+        width: 12vw;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="header-block">
+  <h1 class="ravenclaw-title">Ravenclaw</h1>
+  <h1>ПЛЮЙ-КАМНИ</h1>
+</div>
+
+<div class="main-container">
+  <div class="game-wrapper">
+    <div class="field-container" id="field"></div>
+
+    <div class="buttons">
+      <button id="generateBtn">БРОСИТЬ КАМНИ</button>
+      <button id="manualBtn">РАЗЛОЖИТЬ КАМНИ</button>
+      <button id="saveBtn">СОХРАНИТЬ</button>
+    </div>
+
+    <div class="selectors hidden" id="selectors"></div>
+  </div>
+
+  <div class="tasks-wrapper">
+    <h2>Задания:</h2>
+    <div class="tasks">
+      <ul id="taskList"></ul>
+    </div>
+    
+    <h3>Форматированный вывод:</h3>
+    <div class="output-container">
+      <div class="output" id="formattedOutput"></div>
+      <button class="copy-btn" id="copyBtn">Копировать</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const categories = [  {
+    name: 'ДЗ',
+    stones: [
+      "I.4e79a21ed961dce48.png", 
+      "I.3af60ee1d4f5de6f4.png",
+      "I.5d8b3fb70143d1b16.png",
+      "I.8a5d66f6f19285263.png",
+      "I.105c62525b0e57461e.png",
+      "I.11764eb9aba8803329.png",
+      "I.12fb94888146693f6c.png",
+      "I.21ce84af1b7c7e7a3.png",
+      "I.1178e0a3e1d57998e.png",
+      "I.6a026d5dcd6720cf0.png",
+      "I.136b59f6becc1bd883.png",
+      "I.97dda480e5576415e.png",
+      "I.7a8aadcef46bb2bb9.png"
+    ],
+    broken: "I.broken4c11d1df875b4391.png",
+    tasks: [
+      "Сдать домашнюю работу(основу) по любому предмету.",
+      "Сдать домашнюю работу(основу) по артефакторике.",
+      "Сдать домашнюю работу(основу) по заклинаниям.",
+      "Сдать домашнюю работу(основу) по рунологии.",
+      "Сдать домашнюю работу(основу) по зельеварению.",
+      "Сдать домашнюю работу(основу) по шаманизму.",
+      "Сдать домашнюю работу(основу) по онейрологии.",
+      "Сдать домашнюю работу(основу) по неестествознанию.",
+      "Сдать домашнюю работу(основу) по мифологии Древней Греции.",
+      "Сдать сочинение по любому предмету.",
+      "Сдать доклад по любому предмету.",
+      "Сдать эссе по любому предмету.",
+      "Подать заявку на участие в учебной дуэли или откликнуться на чей-то вызов."
+    ]
+  },
+  {
+    name: 'ВА',
+    stones: [
+      "II.6c729d75a4272561e.png",
+      "II.5e93d7ab7a9241eb8.png",
+      "II.34a56c7be3e10482a.png",
+      "II.179b17266e6bb4def.png",
+      "II.48dd3fde0a613943c.png",
+      "II.2a2a47d29f577bdf4.png",
+      "II.7171869a493354150.png"
+    ],
+    broken: "II.brokena2116b930b6eeea4.png",
+    tasks: [
+      "Посетить редакцию \"Пера Ровены\" и предложить три темы для статей.",
+      "Написать статью в \"Перо Ровены\".",
+      "В поисках идеального фильма на вечер: подайте заявку в RavenCinema, предложите идею для следующего кинопоказа",
+      "В учебном отделе библиотеки Когтеврана обнаружена недостача книг. Помогите исправить ситуацию, принеся книгу подходящей тематики.",
+      "Загляните в радиорубку Rven.FM и оставьте там предложение для радиоэфира.",
+      "Поучаствуйте в любой общешкольной активности.",
+      "Загляните на подмостки \"Театра Ровены\" и предложите идею для будущего спектакля."
+    ]
+  },
+  {
+    name: 'ОГ',
+    stones: [
+      "III.264c2525a819ac2d4.png",
+      "III.3e513c8ee5cd1920b.png",
+      "III.19a14beb8bbfbcf37.png"
+    ],
+    broken: "III.broken67c2a4fc394557de.png",
+    tasks: [
+      "Посетить Общую гостиную вместе с другом и устроить жаркое обсуждение — например, кто круче: игроки в драконболл или квиддич?",
+      "Узнать у обитателей замка, что любит сэр Дагберт и когда у него день рождения, а потом разработать план праздничной вечеринки.",
+      "Как насчет устроить посиделки в общей гостиной под приятную музыку? По крайней мере помогите составить плей-лист для приятного времяпрепровождения."
+    ]
+  },
+  {
+    name: 'БК',
+    stones: [
+      "IV.117d626aa720157f94.png",
+      "IV.8dee236358fed8c2d.png",
+      "IV.6e2a127beec2056bc.png",
+      "IV.5b2a5f43a7bfb928f.png",
+      "IV.4b8d88416b12c4c21.png",
+      "IV.314925857f4f5fefc.png",
+      "IV.106f88537c1e4020b.png",
+      "IV.104e59008e193a887f.png",
+      "IV.29658e6ee4f1768dc.png",
+      "IV.9c53f3f12c207bc05.png",
+      "IV.7b891c2f733b6573f.png"
+    ],
+    broken: "IV.broken9caddce6851f0cea.png",
+    tasks: [
+      "Наведите порядок в своей комнате, а то по ней словно Шуш прошел.",
+      "Поиски пропавшего кота старосты — следы ведут к заброшенной каморке.",
+      "Помогите домовому эльфу Тедди на крыше фруктового сада, кажется посадку черники атаковала стая нюхлеров.",
+      "Пригласите гостей и устройте чаепитие в гостиной Когтеврана.",
+      "Придумать и описать рецепт когтевранского леденца с фруктом или цветком — вкус, название, форма и изображение.",
+      "В читальном зале литературного клуба все покрылось пылью, пора оживить это место.",
+      "Заглянуть в орлятню и позаботиться о своем птенце.",
+      "Сборную факультета по квиддичу уже давно не видели в воздухе. Поддержите команду теплым словом или плакатом.",
+      "Оставьте отзыв на любую книгу в Литературном клубе башни Когтеврана.",
+      "Оставьте отзыв на любой спектакль, поставленный в башне Когтеврана.",
+      "Оставьте 10 сообщений в «Разговорной» башни Когтеврана."
+    ]
+  },
+  {
+    name: 'ГФ',
+    stones: [
+      "V.54fcf7c8b98d02339.png",
+      "V.44c075933326fb8f5.png",
+      "V.3ef9344f45190e48a.png",
+      "V.2e60bc1a7f371d7d4.png",
+      "V.1934f694030984945.png",
+      "V.6.f37f104c511b2d19.png"
+    ],
+    broken: "V.broken16efab67b0530f1b.png",
+    tasks: [
+      "Написать 5 сообщений в «Болталке, флудилке» на Главном Форуме.",
+      "Зайти в башню Подготовительного отделения и познакомиться с новичками.",
+      "Написать дифирамбы трём знакомым.",
+      "Создать собственную тему в Творческом уголке или добавить новый пост в уже существующую.",
+      "Прогуляйтесь по Окрестностям Хогвартса на Главном Форуме.",
+      "Посетить кабинет любого профессора или стажёра на Главном Форуме."
+    ]
+  }
+];
+
+const coords = {
+  'A1': [190.2, 247.6], 'B1': [281.2, 247.6], 'C1': [372.2, 247.6],
+  'A2': [190.2, 338.6], 'B2': [281.2, 338.6], 'C2': [372.2, 338.6],
+  'A3': [190.2, 429.6], 'B3': [281.2, 429.6], 'C3': [372.2, 429.6]
+};
+
+const cellLabels = Object.keys(coords);
+const field = document.getElementById('field');
+const taskList = document.getElementById('taskList');
+const selectorsDiv = document.getElementById('selectors');
+const generateBtn = document.getElementById('generateBtn');
+const manualBtn = document.getElementById('manualBtn');
+const saveBtn = document.getElementById('saveBtn');
+const formattedOutput = document.getElementById('formattedOutput');
+const copyBtn = document.getElementById('copyBtn');
+
+let selectedStones = {};
+let brokenStones = new Set();
+
+// Функция для сокращения названия камня
+function getShortStoneName(fullName) {
+  const parts = fullName.split('.');
+  return `${parts[0]}.${parts[1].substring(0, 1)}`;
+}
+
+function shuffleArray(array) {
+  const result = [...array];
+  for (let i = result.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [result[i], result[j]] = [result[j], result[i]];
+  }
+  return result;
+}
+
+function applyBrokenEffects(img) {
+  const randomRotation = Math.floor(Math.random() * 60) - 30;
+  const randomScale = 0.8 + Math.random() * 0.4;
+  const randomX = Math.floor(Math.random() * 16) - 8;
+  const randomY = Math.floor(Math.random() * 16) - 8;
+  
+  img.style.transform = `translate(-50%, -50%) rotate(${randomRotation}deg) scale(${randomScale})`;
+  img.style.marginLeft = `${randomX}px`;
+  img.style.marginTop = `${randomY}px`;
+}
+
+function getNeighbors(position) {
+  const neighbors = [];
+  const col = position % 3;
+  const row = Math.floor(position / 3);
+  
+  if (col > 0) neighbors.push(position - 1);
+  if (col < 2) neighbors.push(position + 1);
+  if (row > 0) neighbors.push(position - 3);
+  if (row < 2) neighbors.push(position + 3);
+  
+  return neighbors;
+}
+
+function generateBoard() {
+  field.innerHTML = '';
+  taskList.innerHTML = '';
+  selectorsDiv.classList.add('hidden');
+  selectedStones = {};
+  brokenStones = new Set();
+
+  // 1. Создаем пул всех возможных камней с учетом ограничений
+  const categoryPools = {};
+  categories.forEach(category => {
+    categoryPools[category.name] = {
+      stones: shuffleArray([...category.stones]),
+      used: 0,
+      max: 2 // Максимум 2 камня от категории
+    };
+  });
+
+  // 2. Массив для хранения выбранных камней
+  const selectedStonesArray = Array(9).fill(null);
+
+  // 3. Заполняем поле с проверкой соседей и ограничений категорий
+  for (let i = 0; i < 9; i++) {
+    const neighbors = getNeighbors(i);
+    const forbiddenCategories = new Set();
+
+    // Собираем запрещенные категории (уже 2 камня или соседние)
+    for (const [catName, pool] of Object.entries(categoryPools)) {
+      if (pool.used >= pool.max) {
+        forbiddenCategories.add(catName);
+      }
+    }
+
+    // Добавляем категории соседей
+    neighbors.forEach(pos => {
+      if (selectedStonesArray[pos]) {
+        forbiddenCategories.add(selectedStonesArray[pos].category);
+      }
+    });
+
+    // Доступные категории (не запрещенные и с оставшимися камнями)
+    const availableCategories = categories.filter(cat => 
+      !forbiddenCategories.has(cat.name) && 
+      categoryPools[cat.name].stones.length > 0
+    );
+
+    // Если нет доступных категорий, используем любую с камнями
+    const fallbackCategories = categories.filter(cat => 
+      categoryPools[cat.name].stones.length > 0
+    );
+
+    const targetCategories = availableCategories.length > 0 
+      ? availableCategories 
+      : fallbackCategories;
+
+    if (targetCategories.length === 0) break;
+
+    // Выбираем случайную категорию из доступных
+    const category = targetCategories[
+      Math.floor(Math.random() * targetCategories.length)
+    ];
+    const pool = categoryPools[category.name];
+
+    // Берем камень из пула
+    const stoneImage = pool.stones.pop();
+    pool.used++;
+
+    selectedStonesArray[i] = {
+      imageName: stoneImage,
+      task: category.tasks[
+        category.stones.indexOf(stoneImage) % category.tasks.length
+      ],
+      category: category.name
+    };
+  }
+
+  // 4. Размещаем камни на поле
+  selectedStonesArray.forEach((stone, index) => {
+    if (!stone) return;
+
+    const cellId = cellLabels[index];
+    const imageUrl = `https://radika1.link/2025/08/01/${stone.imageName}`;
+    placeStone(cellId, imageUrl);
+    
+    selectedStones[cellId] = {
+      image: imageUrl,
+      task: stone.task,
+      broken: false,
+      category: stone.category,
+      imageName: stone.imageName
+    };
+
+    const li = document.createElement('li');
+    const checkbox = document.createElement('input');
+    checkbox.type = 'checkbox';
+    checkbox.id = `task-${cellId}`;
+    checkbox.dataset.cell = cellId;
+    checkbox.addEventListener('change', updateFormattedOutput);
+    
+    const label = document.createElement('label');
+    label.htmlFor = `task-${cellId}`;
+    label.textContent = `${cellId} — ${stone.task}`;
+    
+    li.appendChild(checkbox);
+    li.appendChild(label);
+    li.dataset.cell = cellId;
+    taskList.appendChild(li);
+  });
+}
+
+function placeStone(cellId, imageUrl, isBroken = false) {
+  const existing = document.querySelector(`.stone[data-cell="${cellId}"]`);
+  if (existing) existing.remove();
+  if (!imageUrl) return;
+
+  const [x, y] = coords[cellId];
+  const img = document.createElement('img');
+  img.src = imageUrl;
+  img.className = 'stone';
+  img.dataset.cell = cellId;
+  
+  // Адаптация позиционирования для мобильных устройств
+  const fieldWidth = field.offsetWidth;
+  const scaleFactor = fieldWidth / 600; // 600 - оригинальная ширина поля
+  
+  img.style.left = `${x * scaleFactor}px`;
+  img.style.top = `${y * scaleFactor}px`;
+  
+  if (isBroken || imageUrl.includes('broken')) {
+    applyBrokenEffects(img);
+  }
+
+  img.addEventListener('click', function() {
+    if (brokenStones.has(cellId)) return;
+    
+    const category = categories.find(cat => 
+      selectedStones[cellId]?.category === cat.name
+    );
+    if (category) {
+      img.src = `https://radika1.link/2025/08/02/${category.broken}`;
+      applyBrokenEffects(img);
+      
+      selectedStones[cellId].broken = true;
+      brokenStones.add(cellId);
+      
+      if (!selectorsDiv.classList.contains('hidden')) enableManual();
+    }
+  });
+  
+  field.appendChild(img);
+}
+
+function enableManual() {
+  selectorsDiv.innerHTML = '';
+  selectorsDiv.classList.remove('hidden');
+  taskList.innerHTML = '';
+
+  cellLabels.forEach(cellId => {
+    const container = document.createElement('div');
+    const label = document.createElement('label');
+    label.textContent = cellId;
+    const select = document.createElement('select');
+    select.dataset.cell = cellId;
+    select.onchange = () => handleSelectChange(cellId, select.value);
+    
+    const defaultOption = document.createElement('option');
+    defaultOption.value = '';
+    defaultOption.textContent = 'Выберите камень';
+    select.appendChild(defaultOption);
+
+    if (selectedStones[cellId]?.image && !selectedStones[cellId]?.broken) {
+      const category = categories.find(cat => 
+        selectedStones[cellId].category === cat.name
+      );
+      if (category) {
+        const brokenOption = document.createElement('option');
+        brokenOption.value = 'broken';
+        brokenOption.textContent = '⸺ Разбитый камень';
+        select.appendChild(brokenOption);
+      }
+    }
+
+    categories.forEach(cat => {
+      cat.stones.forEach((stone, index) => {
+        const url = `https://radika1.link/2025/08/01/${stone}`;
+        const option = document.createElement('option');
+        option.value = url;
+        option.textContent = `${cat.name} - ${getShortStoneName(stone)}`;
+        if (selectedStones[cellId] && selectedStones[cellId].image === url) {
+          option.selected = true;
+        }
+        select.appendChild(option);
+      });
+    });
+
+    container.appendChild(label);
+    container.appendChild(select);
+    selectorsDiv.appendChild(container);
+  });
+
+  updateTaskList();
+}
+
+function handleSelectChange(cellId, value) {
+  if (value === 'broken') {
+    const category = categories.find(cat => 
+      selectedStones[cellId]?.category === cat.name
+    );
+    if (category) {
+      placeStone(cellId, `https://radika1.link/2025/08/02/${category.broken}`, true);
+      selectedStones[cellId] = {
+        ...selectedStones[cellId],
+        broken: true
+      };
+      brokenStones.add(cellId);
+    }
+  } else if (value) {
+    placeStone(cellId, value);
+    const found = categories.flatMap(cat =>
+      cat.stones.map((s, i) => ({
+        url: `https://radika1.link/2025/08/01/${s}`,
+        task: cat.tasks[i % cat.tasks.length],
+        category: cat.name,
+        imageName: s
+      }))
+    ).find(item => item.url === value);
+
+    if (found) {
+      selectedStones[cellId] = { 
+        image: found.url, 
+        task: found.task,
+        broken: false,
+        category: found.category,
+        imageName: found.imageName
+      };
+      brokenStones.delete(cellId);
+    }
+  } else {
+    const stone = document.querySelector(`.stone[data-cell="${cellId}"]`);
+    if (stone) stone.remove();
+    delete selectedStones[cellId];
+    brokenStones.delete(cellId);
+  }
+
+  updateTaskList();
+}
+
+function updateTaskList() {
+  taskList.innerHTML = '';
+  for (const [cell, data] of Object.entries(selectedStones)) {
+    const li = document.createElement('li');
+    const checkbox = document.createElement('input');
+    checkbox.type = 'checkbox';
+    checkbox.id = `task-${cell}`;
+    checkbox.dataset.cell = cell;
+    checkbox.addEventListener('change', updateFormattedOutput);
+    
+    const label = document.createElement('label');
+    label.htmlFor = `task-${cell}`;
+    label.textContent = `${cell} — ${data.task}`;
+    
+    li.appendChild(checkbox);
+    li.appendChild(label);
+    li.dataset.cell = cell;
+    taskList.appendChild(li);
+  }
+  updateFormattedOutput();
+}
+
+function updateFormattedOutput() {
+  const checkedItems = Array.from(document.querySelectorAll('#taskList input[type="checkbox"]:checked'));
+  let outputText = '';
+  
+  checkedItems.forEach(checkbox => {
+    const cellId = checkbox.dataset.cell;
+    const stoneData = selectedStones[cellId];
+    
+    if (stoneData) {
+      const imageUrl = `https://radika1.link/2025/08/01/${stoneData.imageName}`;
+      outputText += `[center][IMG]${imageUrl}[/IMG]\n[B][I]${stoneData.task}[/I][/B][/center]\n\n`;
+    }
+  });
+  
+  formattedOutput.textContent = outputText.trim();
+}
+
+function copyToClipboard() {
+  const text = formattedOutput.textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    copyBtn.classList.add('copied');
+    copyBtn.textContent = '✓ Текст скопирован!';
+    setTimeout(() => {
+      copyBtn.classList.remove('copied');
+      copyBtn.textContent = 'Копировать';
+    }, 2000);
+  }).catch(err => {
+    console.error('Ошибка копирования: ', err);
+    copyBtn.textContent = 'Ошибка копирования!';
+    setTimeout(() => {
+      copyBtn.textContent = 'Копировать';
+    }, 2000);
+  });
+}
+
+function saveFieldAsImage() {
+  // Показываем уведомление о начале процесса
+  saveBtn.textContent = 'Создание изображения...';
+  saveBtn.disabled = true;
+
+  // Создаем клон игрового поля
+  const fieldClone = field.cloneNode(true);
+  fieldClone.style.position = 'fixed';
+  fieldClone.style.left = '-9999px';
+  fieldClone.style.visibility = 'visible';
+  fieldClone.style.backgroundImage = 'url("https://radika1.link/2025/08/01/AddText_08-01-03.22.225b4a3aad5ea2563e.png")';
+  fieldClone.style.backgroundSize = 'cover';
+  
+  // Копируем все камни
+  const stones = document.querySelectorAll('.stone');
+  stones.forEach(stone => {
+    const clone = stone.cloneNode(true);
+    fieldClone.appendChild(clone);
+  });
+
+  document.body.appendChild(fieldClone);
+
+  // Настройки для html2canvas
+  const options = {
+    scale: 2, // Увеличиваем качество
+    logging: false,
+    useCORS: true, // Разрешаем CORS
+    allowTaint: true, // Разрешаем "загрязнение" холста
+    backgroundColor: null, // Прозрачный фон
+    removeContainer: true, // Автоматически удалить контейнер после использования
+    onclone: (clonedDoc) => {
+      // Убедимся, что все изображения загружены
+      const images = clonedDoc.querySelectorAll('img');
+      let loaded = 0;
+      const total = images.length;
+      
+      return new Promise((resolve) => {
+        if (total === 0) resolve();
+        
+        images.forEach(img => {
+          if (img.complete) {
+            loaded++;
+            if (loaded === total) resolve();
+          } else {
+            img.onload = () => {
+              loaded++;
+              if (loaded === total) resolve();
+            };
+            img.onerror = () => {
+              loaded++;
+              if (loaded === total) resolve();
+            };
+          }
+        });
+      });
+    }
+  };
+
+  // Создаем скриншот
+  html2canvas(fieldClone, options).then(canvas => {
+    // Удаляем клон
+    document.body.removeChild(fieldClone);
+    
+    // Создаем ссылку для скачивания
+    const link = document.createElement('a');
+    link.download = 'plui-kamni-' + new Date().toISOString().slice(0, 10) + '.png';
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+    
+    // Показываем уведомление
+    saveBtn.textContent = '✓ Сохранено!';
+    setTimeout(() => {
+      saveBtn.textContent = 'СОХРАНИТЬ';
+      saveBtn.disabled = false;
+    }, 2000);
+  }).catch(err => {
+    console.error('Ошибка создания изображения: ', err);
+    document.body.removeChild(fieldClone);
+    saveBtn.textContent = 'Ошибка!';
+    setTimeout(() => {
+      saveBtn.textContent = 'СОХРАНИТЬ';
+      saveBtn.disabled = false;
+    }, 2000);
+  });
+}
+
+generateBtn.addEventListener('click', generateBoard);
+manualBtn.addEventListener('click', enableManual);
+copyBtn.addEventListener('click', copyToClipboard);
+saveBtn.addEventListener('click', saveFieldAsImage);
+
+window.onload = () => {
+  cellLabels.forEach(cellId => {
+    selectedStones[cellId] = null;
+  });
+};
+
+// Обработчик изменения размера окна для корректировки позиций камней
+window.addEventListener('resize', function() {
+  if (Object.keys(selectedStones).length > 0) {
+    for (const [cellId, stoneData] of Object.entries(selectedStones)) {
+      if (stoneData && stoneData.image) {
+        placeStone(cellId, stoneData.image, stoneData.broken);
+      }
+    }
+  }
+});
+</script>
+</body>
+</html>
